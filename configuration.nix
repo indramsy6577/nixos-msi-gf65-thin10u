@@ -1,8 +1,22 @@
 { config, pkgs, ... }:
 
 {
-  imports = [
-    ./hardware-configuration.nix
+    # Desktop (Pure Wayland)
+  services.desktopManager.gnome.enable = true;
+  services.displayManager.gdm = {
+    enable = true;
+    wayland = true;
+  };
+
+  # Input configuration
+  services.udev.extraRules = ''
+    ACTION=="add|change", SUBSYSTEM=="input", ATTR{name}=="*TouchPad*", ATTR{device_enabled}="0"
+    ACTION=="add|change", SUBSYSTEM=="input", ATTR{name}=="*Touchpad*", ATTR{device_enabled}="0"
+    SUBSYSTEM=="input", KERNEL=="mouse[0-9]*", ATTR{device/enabled}="0"
+  '';
+
+  # Kernel configuration for Wayland + NVIDIA
+  boot = { ./hardware-configuration.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
@@ -26,33 +40,35 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # Display manager & desktop (Pure Wayland)
-  services.xserver.enable = false;
-  services.displayManager.gdm.enable = true;
-  services.displayManager.gdm.wayland = true;
+  # Desktop (Pure Wayland)
   services.desktopManager.gnome.enable = true;
-
-  # Keyboard
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
+  services.displayManager.gdm = {
+    enable = true;
+    wayland = true;
   };
 
-  # Input devices - Hard disable touchpad
+  # Input configuration
   services.udev.extraRules = ''
-    ACTION=="add", SUBSYSTEM=="input", ATTR{name}=="*Touchpad*", ATTR{enabled}="0"
+    ACTION=="add|change", SUBSYSTEM=="input", ATTR{name}=="*Touchpad*", ATTR{enabled}="0"
+    ACTION=="add|change", SUBSYSTEM=="input", ATTR{name}=="*TouchPad*", ATTR{enabled}="0"
   '';
-  
-  # Kernel configuration for touchpad disable and NVIDIA
+
+  # Kernel configuration for Wayland + NVIDIA
   boot = {
     kernelModules = [ "acpi_call" ];
     extraModulePackages = [ config.boot.kernelPackages.acpi_call ];
-    blacklistedKernelModules = [ "i2c_hid_acpi" "hid_multitouch" ];
-    kernelParams = [ 
-      "psmouse.synaptics_intertouch=0"
-      "nvidia-drm.modeset=1"
+    blacklistedKernelModules = [ 
+      "i2c_hid_acpi"
+      "hid_multitouch"
+      "elan_i2c"
+      "synaptics_i2c"
     ];
-  };
+    kernelParams = [ 
+      "nvidia-drm.modeset=1"
+      "i8042.nopnp=1"
+      "i8042.dumbkbd=1"
+      "psmouse.synaptics_intertouch=0"
+    ];
 
   # Printing
   services.printing.enable = true;
@@ -214,7 +230,7 @@
     xterm
     xtermcontrol
     zip
-    unzip
+    unzip 
 
     (pkgs.writeShellScriptBin "nvidia-offload" ''
     exec env \
@@ -236,53 +252,54 @@
     })
   ];
 
-  # ===== Intel + NVIDIA (Hybrid Offload di Wayland) =====
-  services.xserver.videoDrivers = [ "nvidia" ];
-
+  # Hardware Configuration (Pure Wayland)
   hardware.nvidia = {
-    modesetting.enable = true;        # perlu untuk GNOME Wayland
-    powerManagement.enable = true;    # hemat daya saat idle
-    open = false;                     # proprietary (paling kompatibel untuk laptop)
+    modesetting.enable = true;
+    powerManagement.enable = true;
+    open = false;
     nvidiaSettings = true;
-
+    forceFullCompositionPipeline = true;
     prime = {
-      offload.enable = true;          # Intel primary, NVIDIA untuk offload
-      intelBusId  = "PCI:0:2:0";      # ubah jika lspci menunjukkan angka lain
-      nvidiaBusId = "PCI:1:0:0";      # ubah jika lspci menunjukkan angka lain
+      offload.enable = true;
+      intelBusId = "PCI:0:2:0";
+      nvidiaBusId = "PCI:1:0:0";
     };
   };
 
-  # Stack grafis & VA-API (Intel iGPU video decode)
-  hardware.graphics = {
+  # Graphics configuration
+  hardware.opengl = {
     enable = true;
-    enable32Bit = true;     # 32-bit libs (aman untuk kompatibilitas)
+    driSupport = true;
+    driSupport32Bit = true;
     extraPackages = with pkgs; [
-      intel-media-driver     # VA-API untuk iGPU Intel
+      intel-media-driver
+      vaapiVdpau
+      libvdpau-va-gl
     ];
-  };
-
-  # Wayland environment variables
+  };  # Wayland environment variables
   environment.sessionVariables = {
     # Wayland general
-    MOZ_ENABLE_WAYLAND = "1";        # Firefox
-    NIXOS_OZONE_WL = "1";            # Chrome/Electron
-    GDK_BACKEND = "wayland";         # GTK apps
-    XDG_SESSION_TYPE = "wayland";    # Force Wayland session
-    WLR_NO_HARDWARE_CURSORS = "1";   # Software cursor fallback
+    MOZ_ENABLE_WAYLAND = "1";
+    NIXOS_OZONE_WL = "1";
+    GDK_BACKEND = "wayland";
+    XDG_SESSION_TYPE = "wayland";
+    WLR_NO_HARDWARE_CURSORS = "1";
     
     # Qt Wayland
-    QT_QPA_PLATFORM = "wayland";     # Force Wayland for Qt
+    QT_QPA_PLATFORM = "wayland";
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
     
     # NVIDIA Wayland
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-    LIBGL_ALWAYS_SOFTWARE = "0";
+    GBM_BACKEND = "nvidia-drm";
+    LIBVA_DRIVER_NAME = "nvidia";
+    __GL_GSYNC_ALLOWED = "0";
+    __GL_VRR_ALLOWED = "0";
     
     # Desktop environment
-    XDG_CURRENT_DESKTOP = "Gnome";   
+    XDG_CURRENT_DESKTOP = "Gnome";
     XDG_SESSION_DESKTOP = "gnome";
     SDL_VIDEODRIVER = "wayland";
-  };
   };
 
   # Pure Wayland configuration
