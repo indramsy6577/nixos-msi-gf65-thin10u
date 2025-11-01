@@ -16,8 +16,22 @@
   '';
 
   # Kernel configuration for Wayland + NVIDIA
-  boot = { ./hardware-configuration.nix
-  ];
+  boot = {
+    kernelModules = [ "acpi_call" ];
+    extraModulePackages = [ config.boot.kernelPackages.acpi_call ];
+    blacklistedKernelModules = [ 
+      "i2c_hid_acpi"
+      "hid_multitouch"
+      "elan_i2c"
+      "synaptics_i2c"
+    ];
+    kernelParams = [ 
+      "nvidia-drm.modeset=1"
+      "i8042.nopnp=1"
+      "i8042.dumbkbd=1"
+      "psmouse.synaptics_intertouch=0"
+    ];
+  };
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -40,35 +54,7 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # Desktop (Pure Wayland)
-  services.desktopManager.gnome.enable = true;
-  services.displayManager.gdm = {
-    enable = true;
-    wayland = true;
-  };
 
-  # Input configuration
-  services.udev.extraRules = ''
-    ACTION=="add|change", SUBSYSTEM=="input", ATTR{name}=="*Touchpad*", ATTR{enabled}="0"
-    ACTION=="add|change", SUBSYSTEM=="input", ATTR{name}=="*TouchPad*", ATTR{enabled}="0"
-  '';
-
-  # Kernel configuration for Wayland + NVIDIA
-  boot = {
-    kernelModules = [ "acpi_call" ];
-    extraModulePackages = [ config.boot.kernelPackages.acpi_call ];
-    blacklistedKernelModules = [ 
-      "i2c_hid_acpi"
-      "hid_multitouch"
-      "elan_i2c"
-      "synaptics_i2c"
-    ];
-    kernelParams = [ 
-      "nvidia-drm.modeset=1"
-      "i8042.nopnp=1"
-      "i8042.dumbkbd=1"
-      "psmouse.synaptics_intertouch=0"
-    ];
 
   # Printing
   services.printing.enable = true;
@@ -301,6 +287,8 @@
     XDG_SESSION_DESKTOP = "gnome";
     SDL_VIDEODRIVER = "wayland";
   };
+
+  # Pure Wayland configuration
 
   # Pure Wayland configuration
 
