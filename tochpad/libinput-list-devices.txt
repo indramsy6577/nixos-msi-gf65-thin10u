@@ -1,0 +1,2 @@
+==== libinput list-devices ====
+./collect-input-info.sh: line 19: libinput: command not found

@@ -1,0 +1,16 @@
+Nov 02 03:57:38 ctrlaltfocus kernel: i2c i2c-0: Successfully instantiated SPD at 0x50
+Nov 02 03:57:39 ctrlaltfocus kernel: hid: raw HID events driver (C) Jiri Kosina
+Nov 02 03:57:39 ctrlaltfocus kernel: usbcore: registered new interface driver usbhid
+Nov 02 03:57:39 ctrlaltfocus kernel: usbhid: USB HID core driver
+Nov 02 03:57:39 ctrlaltfocus kernel: input: CUST0001:00 04F3:30AA Mouse as /devices/pci0000:00/0000:00:15.2/i2c_designware.1/i2c-2/i2c-CUST0001:00/0018:04F3:30AA.0003/input/input9
+Nov 02 03:57:39 ctrlaltfocus kernel: hid-generic 0003:1EA7:0066.0001: input,hidraw0: USB HID v1.10 Keyboard [2.4G Mouse] on usb-0000:00:14.0-3/input0
+Nov 02 03:57:39 ctrlaltfocus kernel: input: CUST0001:00 04F3:30AA Touchpad as /devices/pci0000:00/0000:00:15.2/i2c_designware.1/i2c-2/i2c-CUST0001:00/0018:04F3:30AA.0003/input/input11
+Nov 02 03:57:39 ctrlaltfocus kernel: hid-generic 0018:04F3:30AA.0003: input,hidraw1: I2C HID v1.00 Mouse [CUST0001:00 04F3:30AA] on i2c-CUST0001:00
+Nov 02 03:57:39 ctrlaltfocus kernel: psmouse serio1: elantech: assuming hardware version 4 (with firmware version 0x4d5f01)
+Nov 02 03:57:39 ctrlaltfocus kernel: psmouse serio1: elantech: Synaptics capabilities query result 0x11, 0x15, 0x0d.
+Nov 02 03:57:39 ctrlaltfocus kernel: psmouse serio1: elantech: Elan sample query result 03, c0, 76
+Nov 02 03:57:39 ctrlaltfocus kernel: hid-generic 0003:1EA7:0066.0002: input,hiddev96,hidraw2: USB HID v1.10 Mouse [2.4G Mouse] on usb-0000:00:14.0-3/input1
+Nov 02 03:57:39 ctrlaltfocus kernel: input: ETPS/2 Elantech Touchpad as /devices/platform/i8042/serio1/input/input6
+Nov 02 03:57:40 ctrlaltfocus kernel: input: CUST0001:00 04F3:30AA Mouse as /devices/pci0000:00/0000:00:15.2/i2c_designware.1/i2c-2/i2c-CUST0001:00/0018:04F3:30AA.0003/input/input17
+Nov 02 03:57:40 ctrlaltfocus kernel: input: CUST0001:00 04F3:30AA Touchpad as /devices/pci0000:00/0000:00:15.2/i2c_designware.1/i2c-2/i2c-CUST0001:00/0018:04F3:30AA.0003/input/input19
+Nov 02 03:57:40 ctrlaltfocus kernel: hid-multitouch 0018:04F3:30AA.0003: input,hidraw1: I2C HID v1.00 Mouse [CUST0001:00 04F3:30AA] on i2c-CUST0001:00

@@ -1,0 +1,2 @@
+Kernel: Linux ctrlaltfocus 6.12.55 #1-NixOS SMP PREEMPT_DYNAMIC Thu Oct 23 14:20:48 UTC 2025 x86_64 GNU/Linux
+Desktop: Gnome | Session: wayland

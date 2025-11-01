@@ -1,0 +1,14 @@
+total 0
+lrwxrwxrwx 1 root root  9 Nov  2 03:57 pci-0000:00:14.0-usb-0:3:1.0-event-kbd -> ../event6
+lrwxrwxrwx 1 root root  9 Nov  2 03:57 pci-0000:00:14.0-usb-0:3:1.1-event -> ../event9
+lrwxrwxrwx 1 root root 10 Nov  2 03:57 pci-0000:00:14.0-usb-0:3:1.1-event-mouse -> ../event10
+lrwxrwxrwx 1 root root  9 Nov  2 03:57 pci-0000:00:14.0-usb-0:3:1.1-mouse -> ../mouse2
+lrwxrwxrwx 1 root root  9 Nov  2 03:57 pci-0000:00:14.0-usbv2-0:3:1.0-event-kbd -> ../event6
+lrwxrwxrwx 1 root root  9 Nov  2 03:57 pci-0000:00:14.0-usbv2-0:3:1.1-event -> ../event9
+lrwxrwxrwx 1 root root 10 Nov  2 03:57 pci-0000:00:14.0-usbv2-0:3:1.1-event-mouse -> ../event10
+lrwxrwxrwx 1 root root  9 Nov  2 03:57 pci-0000:00:14.0-usbv2-0:3:1.1-mouse -> ../mouse2
+lrwxrwxrwx 1 root root  9 Nov  2 03:57 pci-0000:00:15.2-platform-i2c_designware.1-event-mouse -> ../event8
+lrwxrwxrwx 1 root root  9 Nov  2 03:57 pci-0000:00:15.2-platform-i2c_designware.1-mouse -> ../mouse0
+lrwxrwxrwx 1 root root  9 Nov  2 03:57 platform-i8042-serio-0-event-kbd -> ../event0
+lrwxrwxrwx 1 root root 10 Nov  2 03:57 platform-i8042-serio-1-event-mouse -> ../event13
+lrwxrwxrwx 1 root root  9 Nov  2 03:57 platform-i8042-serio-1-mouse -> ../mouse3
