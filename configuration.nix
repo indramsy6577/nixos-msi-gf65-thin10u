@@ -85,6 +85,7 @@
     })
   ];
 
+  fonts.fontDir.enable = true;
   environment.systemPackages = with pkgs; [
     curl flameshot
     (pkgs.writeShellScriptBin "flameshot-wayland" ''
