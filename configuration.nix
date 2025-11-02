@@ -94,9 +94,9 @@
     satty
 
     qt6.qtwayland qt5.qtwayland
-    alacritty git google-chrome htop neovim nix-ld obs-studio ffmpeg-full
+    alacritty jetbrains-mono git google-chrome htop neovim nix-ld obs-studio ffmpeg-full
     pavucontrol podman podman-compose podman-desktop
-    remmina vim vscode-with-extensions wget winbox4
+    remmina tmux vim vscode-with-extensions wget winbox4
     pciutils mesa-demos vulkan-tools
     zip unzip
 
