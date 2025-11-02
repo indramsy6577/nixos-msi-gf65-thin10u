@@ -203,6 +203,9 @@
       categories = [ "AudioVideo" "Recorder" ];
       terminal = false;
     })
+
+    #termius
+    (pkgs.callPackage ./termius.nix{})
   ];
 
 
