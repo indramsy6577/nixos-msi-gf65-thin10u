@@ -205,12 +205,6 @@
     })
   ];
 
-  # === ALIAS: 'obs' -> 'obs-nv' ===
-  environment.shellAliases = {
-    obs = "obs-nv";
-    # Bonus kalau mau start silent langsung rekam:
-    obs-record = "obs-nv --startrecording --minimize-to-tray";
-  };
 
   # ===== Intel + NVIDIA (Hybrid Offload di Wayland) =====
   services.xserver.videoDrivers = [ "nvidia" ];
