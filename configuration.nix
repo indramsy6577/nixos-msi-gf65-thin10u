@@ -3,6 +3,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./termius.nix
   ];
 
   # Boot
@@ -126,9 +127,6 @@
     pciutils            # lspci
     mesa-demos          # glxinfo/glxgears (via XWayland off; tapi tetap berguna)
     vulkan-tools        # vulkaninfo
-
-    # terminal
-    xterm xtermcontrol
 
     # helper: nvidia offload wrapper
     (pkgs.writeShellScriptBin "nvidia-offload" ''
