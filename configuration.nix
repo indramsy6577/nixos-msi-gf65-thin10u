@@ -54,7 +54,9 @@
     isNormalUser = true;
     description = "Control Alternative Focus";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [ ];
+    packages = with pkgs; [ 
+      tree
+    ];
   };
 
   security.sudo.extraRules = [{
@@ -92,7 +94,7 @@
     satty
 
     qt6.qtwayland qt5.qtwayland
-    git google-chrome htop nix-ld obs-studio ffmpeg-full
+    alacritty git google-chrome htop neovim nix-ld obs-studio ffmpeg-full
     pavucontrol podman podman-compose podman-desktop
     remmina vim vscode-with-extensions wget winbox4
     pciutils mesa-demos vulkan-tools
