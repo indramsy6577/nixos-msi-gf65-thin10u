@@ -238,9 +238,9 @@
     GDK_BACKEND = "wayland";
     XDG_SESSION_TYPE = "wayland";
 
-    # Qt Wayland
-    QT_QPA_PLATFORM = "wayland";
-    QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
+    # Qt auto pilih
+    # QT_QPA_PLATFORM = "wayland";
+    # QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
 
     # NVIDIA Wayland
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
