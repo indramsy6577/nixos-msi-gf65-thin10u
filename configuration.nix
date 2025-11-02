@@ -91,12 +91,13 @@
       #!/bin/sh
       env XDG_CURRENT_DESKTOP=GNOME QT_QPA_PLATFORM=wayland flameshot "$@"
     '')
+
     satty
 
     qt6.qtwayland qt5.qtwayland
     alacritty jetbrains-mono git google-chrome htop neovim nix-ld obs-studio ffmpeg-full
     pavucontrol podman podman-compose podman-desktop
-    remmina tmux vim vscode-with-extensions wget winbox4
+    remmina starship tmux vim vscode-with-extensions wget winbox4
     pciutils mesa-demos vulkan-tools
     zip unzip
 
