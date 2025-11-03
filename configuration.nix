@@ -13,16 +13,31 @@
   time.timeZone = "Asia/Jakarta";
 
   i18n.defaultLocale = "en_US.UTF-8";
-  i18n.extraLocaleSettings = { LC_ALL = "en_US.UTF-8"; };
+  i18n.extraLocaleSettings = {
+    LC_ADDRESS = "en_US.UTF-8";
+    LC_IDENTIFICATION = "en_US.UTF-8";
+    LC_MEASUREMENT = "en_US.UTF-8";
+    LC_MONETARY = "en_US.UTF-8";
+    LC_NAME = "en_US.UTF-8";
+    LC_NUMERIC = "en_US.UTF-8";
+    LC_PAPER = "en_US.UTF-8";
+    LC_TELEPHONE = "en_US.UTF-8";
+    LC_TIME = "en_US.UTF-8";
+  };
 
-  # === GNOME + Wayland ===
+  # GNOME (Wayland)
   services.xserver.enable = true;
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.displayManager.gdm.wayland = true;
   services.xserver.desktopManager.gnome.enable = true;
-  services.xserver.xkb.layout = "us";
 
-  # === Audio (PipeWire) ===
+  # Keyboard
+  services.xserver.xkb = { layout = "us"; variant = ""; };
+
+  # Printing
+  services.printing.enable = true;
+
+  # Audio (PipeWire)
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -34,12 +49,14 @@
     wireplumber.enable = true;
   };
 
-  # === User ===
+  # User
   users.users.focus = {
     isNormalUser = true;
     description = "Control Alternative Focus";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [ tree ];
+    packages = with pkgs; [ 
+      tree
+    ];
   };
 
   security.sudo.extraRules = [{
@@ -47,7 +64,7 @@
     commands = [{ command = "ALL"; options = [ "NOPASSWD" ]; }];
   }];
 
-  # === ACME (Cloudflare) ===
+  # ACME (Cloudflare DNS)
   security.acme = {
     acceptTerms = true;
     defaults.email = "focus@ctrlaltfocus.web.id";
@@ -58,7 +75,19 @@
     };
   };
 
+  programs.firefox.enable = true;
+  programs.starship.enable = true;
+
+  # Jalankan ~/.bashrc otomatis di semua shell login
+  environment.shellInit = ''
+    if [ -f ~/.bashrc ]; then
+      source ~/.bashrc
+    fi
+  '';
+
   nixpkgs.config.allowUnfree = true;
+
+  # OBS pakai ffmpeg-full (NVENC)
   nixpkgs.overlays = [
     (final: prev: {
       obs-studio = prev.obs-studio.override { ffmpeg = prev.ffmpeg-full; };
@@ -66,86 +95,24 @@
   ];
 
   fonts.fontDir.enable = true;
-  programs.starship.enable = true;
-
-  environment.shellInit = ''
-    if [ -f ~/.bashrc ]; then
-      source ~/.bashrc
-    fi
-  '';
-
-  # === NVIDIA PRIME Offload ===
-  services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.nvidia = {
-    modesetting.enable = true;
-    powerManagement.enable = true;
-    open = false;
-    nvidiaSettings = true;
-    prime = {
-      offload = {
-        enable = true;
-        enableOffloadCmd = true;
-      };
-      intelBusId  = "PCI:0:2:0";
-      nvidiaBusId = "PCI:1:0:0";
-    };
-  };
-
-  # === GPU + VAAPI ===
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-    extraPackages = with pkgs; [
-      intel-media-driver
-      nvidia-vaapi-driver
-    ];
-  };
-
-  # === Wayland Variables ===
-  environment.sessionVariables = {
-    MOZ_ENABLE_WAYLAND = "1";
-    NIXOS_OZONE_WL = "1";
-    GDK_BACKEND = "wayland";
-    XDG_SESSION_TYPE = "wayland";
-    XDG_CURRENT_DESKTOP = "GNOME";
-    SDL_VIDEODRIVER = "wayland";
-  };
-
-  # === System Packages (GNOME multimedia) ===
   environment.systemPackages = with pkgs; [
-    # Core tools
-    alacritty curl git htop neovim starship tmux vim wget zip unzip
+    brave curl flameshot
+    (pkgs.writeShellScriptBin "flameshot-wayland" ''
+      #!/bin/sh
+      env XDG_CURRENT_DESKTOP=GNOME QT_QPA_PLATFORM=wayland flameshot "$@"
+    '')
 
-    # Browsers
-    brave google-chrome vivaldi widevine-cdm
+    satty
 
-    # Media players
-    vlc mpv celluloid  # celluloid = GTK frontend for mpv
+    qt6.qtwayland qt5.qtwayland
+    alacritty jetbrains-mono nerd-fonts.jetbrains-mono git google-chrome htop neovim nix-ld obs-studio ffmpeg-full
+    pavucontrol podman podman-compose podman-desktop
+    remmina starship tmux vim vscodium wget winbox4
+    pciutils mesa-demos vivaldi vulkan-tools
+    zip unzip
 
-    # Audio tools
-    audacity easyeffects pavucontrol
 
-    # Video editing (non-KDE)
-    shotcut handbrake obs-studio ffmpeg-full
-
-    # Image editing
-    gimp inkscape krita blender imagemagick
-
-    # Codec / GStreamer
-    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
-    gst_all_1.gst-libav gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good 
-    gst_all_1.gst-plugins-bad gst_all_1.gst-plugins-ugly gst_all_1.gst-vaapi lame 
-    x264 x265 libopus flac a52dec faad2
-
-    # Utils
-    flameshot satty remmina winbox4 podman podman-compose podman-desktop
-    pciutils mesa-demos vulkan-tools
-
-    # Termius
-    (pkgs.callPackage ./termius.nix { })
-
-    # OBS NVIDIA launcher
+    # OBS NVENC launcher (tetap boleh)
     (pkgs.writeShellScriptBin "obs-nv" ''
       export LIBVA_DRIVER_NAME=nvidia
       export NVD_BACKEND=direct
@@ -164,11 +131,14 @@
       terminal = false;
     })
 
-    # Chrome NVIDIA launcher
+    # Termius
+    (pkgs.callPackage ./termius.nix { })
+    
+    # Chrome (NVIDIA) launcher khusus
     (pkgs.writeShellScriptBin "chrome-nv" ''
       exec nvidia-offload google-chrome-stable \
         --use-gl=desktop \
-        --enable-features=VaapiVideoDecoder,VaapiVideoEncoder,UseOzonePlatform,Vulkan,CanvasOopRasterization \
+        --enable-features=UseOzonePlatform,Vulkan,CanvasOopRasterization \
         --ozone-platform=wayland \
         --ignore-gpu-blocklist "$@"
     '')
@@ -182,24 +152,61 @@
     })
   ];
 
-  # === Services ===
-  services.printing.enable = true;
-  services.openssh.enable = true;
-  services.openssh.settings = {
-    PasswordAuthentication = false;
-    KbdInteractiveAuthentication = false;
+  # ===== Intel default + NVIDIA offload (hemat baterai) =====
+  services.xserver.videoDrivers = [ "nvidia" ];
+
+  hardware.nvidia = {
+    modesetting.enable = true;
+    powerManagement.enable = true;   # aktifkan runtime PM (dGPU bisa sleep)
+    open = false;
+    nvidiaSettings = true;
+
+    prime = {
+      offload = {
+        enable = true;               # Intel = default
+        enableOffloadCmd = true;     # sediakan wrapper 'nvidia-offload'
+      };
+      intelBusId  = "PCI:0:2:0";
+      nvidiaBusId = "PCI:1:0:0";
+    };
   };
+
+  # Grafik + VA-API
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+    extraPackages = with pkgs; [
+      intel-media-driver
+      nvidia-vaapi-driver
+    ];
+  };
+
+  # Wayland env (aman untuk default Intel; hindari variabel yang memaksa NVIDIA)
+  environment.sessionVariables = {
+    MOZ_ENABLE_WAYLAND = "1";
+    NIXOS_OZONE_WL = "1";
+    GDK_BACKEND = "wayland";
+    XDG_SESSION_TYPE = "wayland";
+    XDG_CURRENT_DESKTOP = "GNOME";
+    XDG_SESSION_DESKTOP = "gnome";
+    SDL_VIDEODRIVER = "wayland";
+    # ⚠️ JANGAN set __GLX_VENDOR_LIBRARY_NAME atau __NV_* secara global di sini
+  };
+
+  programs.nix-ld.enable = true;
+
+  services.openssh.enable = true;
+  services.openssh.settings.PasswordAuthentication = false;
+  services.openssh.settings.KbdInteractiveAuthentication = false;
+
   services.upower.enable = true;
   services."power-profiles-daemon".enable = true;
+
   networking.firewall.enable = false;
 
-  # === XDG Portals ===
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   xdg.portal.config.common.default = "*";
-
-  programs.firefox.enable = true;
-  programs.nix-ld.enable = true;
 
   system.stateVersion = "25.05";
 }
