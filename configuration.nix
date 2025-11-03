@@ -76,6 +76,15 @@
   };
 
   programs.firefox.enable = true;
+  programs.starship.enable = true;
+
+  # Jalankan ~/.bashrc otomatis di semua shell login
+  environment.shellInit = ''
+    if [ -f ~/.bashrc ]; then
+      source ~/.bashrc
+    fi
+  '';
+
   nixpkgs.config.allowUnfree = true;
 
   # OBS pakai ffmpeg-full (NVENC)
