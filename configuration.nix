@@ -75,6 +75,7 @@
     };
   };
 
+  programs.direnv.enable = true;
   programs.firefox.enable = true;
   programs.starship.enable = true;
 
@@ -105,7 +106,7 @@
     satty
 
     qt6.qtwayland qt5.qtwayland
-    alacritty jetbrains-mono nerd-fonts.jetbrains-mono git google-chrome htop neovim nix-ld obs-studio ffmpeg-full
+    alacritty direnv jetbrains-mono nerd-fonts.jetbrains-mono git google-chrome htop neovim nix-ld obs-studio ffmpeg-full
     pavucontrol podman podman-compose podman-desktop
     remmina starship tmux vim vscodium wget winbox4
     pciutils mesa-demos vivaldi vulkan-tools
