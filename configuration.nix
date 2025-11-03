@@ -108,7 +108,7 @@
     qt6.qtwayland qt5.qtwayland
     alacritty direnv jetbrains-mono nerd-fonts.jetbrains-mono git google-chrome htop neovim nix-ld obs-studio ffmpeg-full
     pavucontrol podman podman-compose podman-desktop
-    remmina starship tmux vim vscodium wget winbox4
+    remmina starship tmux vim vscode wget winbox4
     pciutils mesa-demos vivaldi vulkan-tools
     zip unzip
 
