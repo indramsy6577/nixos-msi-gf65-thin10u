@@ -96,7 +96,7 @@
 
   fonts.fontDir.enable = true;
   environment.systemPackages = with pkgs; [
-    curl flameshot
+    brave curl flameshot
     (pkgs.writeShellScriptBin "flameshot-wayland" ''
       #!/bin/sh
       env XDG_CURRENT_DESKTOP=GNOME QT_QPA_PLATFORM=wayland flameshot "$@"
@@ -108,7 +108,7 @@
     alacritty jetbrains-mono nerd-fonts.jetbrains-mono git google-chrome htop neovim nix-ld obs-studio ffmpeg-full
     pavucontrol podman podman-compose podman-desktop
     remmina starship tmux vim vscode-with-extensions wget winbox4
-    pciutils mesa-demos vulkan-tools
+    pciutils mesa-demos vivaldi vulkan-tools
     zip unzip
 
     # OBS NVENC launcher (tetap boleh)
