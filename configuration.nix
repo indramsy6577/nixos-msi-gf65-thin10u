@@ -53,7 +53,7 @@
   users.users.focus = {
     isNormalUser = true;
     description = "Control Alternative Focus";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker"];
     packages = with pkgs; [ 
       tree
     ];
@@ -96,6 +96,8 @@
   ];
 
   fonts.fontDir.enable = true;
+  virtualisation.docker.enable = true;
+
   environment.systemPackages = with pkgs; [
     brave curl flameshot
     (pkgs.writeShellScriptBin "flameshot-wayland" ''
@@ -106,9 +108,8 @@
     satty
 
     qt6.qtwayland qt5.qtwayland
-    alacritty direnv jetbrains-mono nerd-fonts.jetbrains-mono git google-chrome htop neovim nix-ld obs-studio ffmpeg-full
-    pavucontrol podman podman-compose podman-desktop
-    remmina starship tmux vim vscode wget winbox4
+    alacritty direnv docker docker-compose jetbrains-mono neofetch nerd-fonts.jetbrains-mono git google-chrome htop neovim nix-ld obs-studio ffmpeg-full
+    pavucontrol remmina starship tmux vim vscode wget winbox4
     pciutils mesa-demos vivaldi vulkan-tools
     zip unzip
 
